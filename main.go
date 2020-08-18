@@ -1,6 +1,7 @@
 package main
 
 import (
+	"controller/signals"
 	"controller/utils"
 	"k8s.io/api/core/v1"
 	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -18,9 +19,8 @@ func main() {
 
 	controller := utils.NewController(wq, indexer, informer)
 
-	stop := make(chan struct{})
+	stop := signals.SetupSignalHandler()
 
-	defer close(stop)
 	go controller.Run(1, stop)
 	// Wait forever
 	select {}

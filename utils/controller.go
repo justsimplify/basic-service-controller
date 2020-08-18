@@ -25,7 +25,7 @@ func NewController(queue workqueue.RateLimitingInterface, indexer cache.Indexer,
 	}
 }
 
-func (c *Controller) Run(threadiness int, stopCh chan struct{}) {
+func (c *Controller) Run(threadiness int, stopCh <- chan struct{}) {
 	defer runtime.HandleCrash()
 
 	// Let the workers stop when we are done

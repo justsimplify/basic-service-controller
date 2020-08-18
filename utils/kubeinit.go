@@ -7,18 +7,23 @@ import (
 	"k8s.io/klog"
 )
 
+var kubeController *rest.Config
+
 func NewKubeController() *rest.Config {
-	var kubeconfig string
-	var master string
+	if kubeController == nil {
+		var kubeconfig string
+		var master string
+		var err error
 
-	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
-	flag.StringVar(&master, "master", "", "master url")
-	flag.Parse()
+		flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
+		flag.StringVar(&master, "master", "", "master url")
+		flag.Parse()
 
-	// creates the connection
-	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
-	if err != nil {
-		klog.Fatal(err)
+		// creates the connection
+		kubeController, err = clientcmd.BuildConfigFromFlags(master, kubeconfig)
+		if err != nil {
+			klog.Fatal(err)
+		}
 	}
-	return config
+	return kubeController
 }

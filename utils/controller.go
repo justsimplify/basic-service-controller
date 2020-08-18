@@ -77,6 +77,7 @@ func (c *Controller) performOperation(key string) error {
 		klog.Errorf("Fetching object with key %s from store failed with %v", key, err)
 		return err
 	}
+
 	if !exists {
 		fmt.Printf("Service %s does not exist anymore\n", key)
 	} else {
@@ -84,6 +85,20 @@ func (c *Controller) performOperation(key string) error {
 		// is dependent on the actual instance, to detect that a Service was recreated with the same name
 		fmt.Printf("Sync/Add/Update for Service %s\n", obj.(*v1.Service).GetName())
 	}
+
+	// Commented code which sets labels in service
+
+	/*
+	service := obj.(*v1.Service)
+	service.SetLabels(map[string]string{
+		"custom-label": "label_1",
+	})
+	d, _ := json.Marshal(service)
+	_, err := NewKubeClient().CoreV1().Services(service.Namespace).Patch(context.Background(), service.Name, types.StrategicMergePatchType, d, v12.PatchOptions{})
+	if err != nil {
+		fmt.Println(err)
+	}
+	*/
 	return nil
 }
 

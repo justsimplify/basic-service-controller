@@ -11,8 +11,7 @@ import (
 )
 
 func main() {
-	kubeController := utils.NewKubeController()
-	kubeClientSet := utils.NewKubeClient(kubeController)
+	kubeClientSet := utils.NewKubeClient()
 	serviceWatch := createServiceWatcher(kubeClientSet)
 	wq := createWorkQueue()
 	indexer, informer := createIndexerAndInformer(serviceWatch, wq)
